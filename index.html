@@ -14,6 +14,18 @@
             <canvas id="result"></canvas>
             <label for="resource">ファイルを選択:</label>
             <input id="resource" type="file" accept="image/png, image/jpeg">
+            <div>
+                <input id="x" type="range" value="0" step="0.001" max="1" min="0">
+                <label for="x">横位置</label>
+            </div>
+            <div>
+                <input id="y" type="range" value="0" step="0.001" max="1" min="0">
+                <label for="y">縦位置</label>
+            </div>
+            <div>
+                <input id="scale" type="range" value="1" step="0.001" max="10" min="0.1">
+                <label for="scale">文字の大きさ</label>
+            </div>
         </main>
         <footer>
 
@@ -26,36 +38,55 @@
         </style>
 
         <script>
-            var file = "";
+            let file = new Image();
             const font = new Image();
             font.src = "seikou.png";
             const resource = document.getElementById("resource");
 
+            const x = document.getElementById("x");
+            const y = document.getElementById("y");
+            const scale = document.getElementById("scale");
+
             function update() {
                 const canvas = document.getElementById("result");                
                 const drawer = canvas.getContext("2d");
+                drawer.save();
+                drawer.drawImage(file, 0, 0);
+                // 中心位置
+                const drawX = 1.0 * x.value * canvas.width;
+                const drawY = 1.0 * y.value * canvas.height;
+                
+                drawer.drawImage(font, 0, 0, font.width, font.height, drawX - ((scale.value * font.width) / 2), drawY - ((scale.value * font.height) / 2), font.width * scale.value, font.height * scale.value);
 
-                const image = new Image();
-                const reader = new FileReader();
-
-                reader.onload = function (event) {
-                    image.onload = function() {
-                        canvas.width = image.width;
-                        canvas.height = image.height;
-                        drawer.drawImage(image, 0, 0);
-                        drawer.drawImage(font, image.width / 2 - font.width / 2, image.height / 2 - font.width / 2);
-                    };
-
-                    image.src = event.target.result;
-                };
-
-                reader.readAsDataURL(file);
+                console.log(drawX);
+                console.log(drawY);
             }
 
             resource.addEventListener("change", function() {
-                file = this.files[0];
-                update();
+                const f = this.files[0];
+
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    file.onload = function() {
+                        const canvas = document.getElementById("result");
+                        canvas.width = file.width;
+                        canvas.height = file.height;
+                        x.value = 0.5;
+                        y.value = 0.85;
+
+                        scale.value = file.width / 3000.0;
+                        update();                        
+                    };
+
+                    file.src = event.target.result;
+                };
+
+                reader.readAsDataURL(f);
             });
+
+            x.addEventListener("input", update);
+            y.addEventListener("input", update);
+            scale.addEventListener("input", update);
         </script>
     </body>
 </html>
