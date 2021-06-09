@@ -11,10 +11,51 @@
             <p>※加工処理はブラウザ上で行われるため、サーバーにアップロードされることはありません。</p>
         </header>
         <main>
-
+            <canvas id="result"></canvas>
+            <label for="resource">ファイルを選択:</label>
+            <input id="resource" type="file" accept="image/png, image/jpeg">
         </main>
         <footer>
 
         </footer>
+
+        <style>
+            #result {
+                width: 100%;
+            }
+        </style>
+
+        <script>
+            var file = "";
+            const font = new Image();
+            font.src = "seikou.png";
+            const resource = document.getElementById("resource");
+
+            function update() {
+                const canvas = document.getElementById("result");                
+                const drawer = canvas.getContext("2d");
+
+                const image = new Image();
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                    image.onload = function() {
+                        canvas.width = image.width;
+                        canvas.height = image.height;
+                        drawer.drawImage(image, 0, 0);
+                        drawer.drawImage(font, image.width / 2 - font.width / 2, image.height / 2 - font.width / 2);
+                    };
+
+                    image.src = event.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            resource.addEventListener("change", function() {
+                file = this.files[0];
+                update();
+            });
+        </script>
     </body>
 </html>
