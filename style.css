@@ -68,6 +68,6 @@ main div {
     border-radius: 8px;
 }
 
-#result {
+#rsrt, #result {
     width: 100%;
 }
