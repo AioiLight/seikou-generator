@@ -31,13 +31,17 @@
                 </div>
 
                 <div class="button">
+                    <button id="reset">リセット</button>
+                </div>
+
+                <div class="button">
                     <button id="save">成功！ (保存)</button>
                     <p>下に出てくる画像を長押しして保存します。</p>
                 </div>                
                 <div>
                     <img id="rsrt">
                 </div>
-                
+
                 <div class="button">
                     <button id="share">成功！ (共有)</button>
                 </div>
@@ -57,6 +61,7 @@
             const y = document.getElementById("y");
             const scale = document.getElementById("scale");
 
+            const reset = document.getElementById("reset");
             const save = document.getElementById("save");
             const share = document.getElementById("share");
 
@@ -106,6 +111,14 @@
             x.addEventListener("input", update);
             y.addEventListener("input", update);
             scale.addEventListener("input", update);
+
+            reset.addEventListener("click", () => {
+                x.value = 0.5;
+                y.value = 0.85;
+
+                scale.value = file.width / 3000.0;
+                update();         
+            });
 
             save.addEventListener("click", () => {
                 const canvas = document.getElementById("result");
