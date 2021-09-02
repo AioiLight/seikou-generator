@@ -76,9 +76,6 @@
                 const drawY = 1.0 * y.value * canvas.height;
                 
                 drawer.drawImage(font, 0, 0, font.width, font.height, drawX - ((scale.value * font.width) / 2), drawY - ((scale.value * font.height) / 2), font.width * scale.value, font.height * scale.value);
-
-                console.log(drawX);
-                console.log(drawY);
             }
 
             resource.addEventListener("change", function() {
